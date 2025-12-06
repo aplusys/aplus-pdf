@@ -18,7 +18,7 @@ class PdfManager extends Manager
      */
     public function getDefaultDriver()
     {
-        return $this->config->get('snappy.default', 'wkhtmltopdf');
+        return $this->config->get('aplus-pdf.default', 'wkhtmltopdf');
     }
 
     /**
@@ -29,7 +29,7 @@ class PdfManager extends Manager
     protected function createWkhtmltopdfDriver()
     {
         // Resolve the legacy Pdf instance which is already configured in registerPdf()
-        $legacyPdf = $this->container->make('snappy.pdf.wrapper');
+        $legacyPdf = $this->container->make('aplus-pdf.wrapper');
         
         return new WkhtmltopdfDriver($legacyPdf);
     }
@@ -104,7 +104,7 @@ class PdfManager extends Manager
             return $fake;
         });
         
-        $this->config->set('snappy.default', 'fake');
+        $this->config->set('aplus-pdf.default', 'fake');
         
         return $fake;
     }
@@ -116,7 +116,7 @@ class PdfManager extends Manager
      */
     protected function createBrowsershotDriver()
     {
-        $config = $this->config->get('snappy.drivers.browsershot', []);
+        $config = $this->config->get('aplus-pdf.drivers.browsershot', []);
         
         return new BrowsershotDriver($this->container['view'], $config);
     }

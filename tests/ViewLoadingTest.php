@@ -23,7 +23,7 @@ class ViewLoadingTest extends TestCase
         $driver->shouldReceive('loadView')->with('test.view', ['foo' => 'bar'])->once()->andReturnSelf();
 
         // Bind manager to return our mock driver
-        $this->app->bind('snappy.pdf', function () use ($driver) {
+        $this->app->bind('aplus.pdf', function () use ($driver) {
              return $driver;
         });
         

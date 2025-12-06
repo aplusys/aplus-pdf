@@ -9,7 +9,7 @@ class PdfDefaultConfigurationTest extends TestCase
     public function testDefaultConfigIsApplied()
     {
         // Resolve the underlying legacy wrapper which holds the options
-        $pdf = app('snappy.pdf.wrapper'); 
+        $pdf = app('aplus-pdf.wrapper'); 
         $options = $pdf->getOptions();
 
         $this->assertEquals(0, $options['margin-top']);

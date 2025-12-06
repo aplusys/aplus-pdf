@@ -38,6 +38,6 @@ class Pdf extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'snappy.pdf'; // Resolves to PdfManager
+        return 'aplus.pdf'; // Resolves to PdfManager
     }
 }

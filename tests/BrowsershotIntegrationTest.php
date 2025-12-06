@@ -11,7 +11,7 @@ class BrowsershotIntegrationTest extends TestCase
     public function testManagerResolvesBrowsershotDriver()
     {
         // Set default driver to browsershot
-        config(['snappy.default' => 'browsershot']);
+        config(['aplus-pdf.default' => 'browsershot']);
         
         $driver = Pdf::driver('browsershot');
         
@@ -20,12 +20,12 @@ class BrowsershotIntegrationTest extends TestCase
     
     public function testFacadeResolvesToBrowsershotWhenDefault()
     {
-        config(['snappy.default' => 'browsershot']);
+        config(['aplus-pdf.default' => 'browsershot']);
         
         // When accessing Facade methods, it should proxy to default driver
         // We can check the underlying instance by resolving the manager
         
-        $manager = app('snappy.pdf');
+        $manager = app('aplus.pdf');
         $this->assertInstanceOf(BrowsershotDriver::class, $manager->driver());
     }
 }

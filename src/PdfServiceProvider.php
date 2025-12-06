@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Knp\Snappy\Image as SnappyImage;
 use Knp\Snappy\Pdf as SnappyPdf;
 
-class SnappyServiceProvider extends ServiceProvider
+class PdfServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
@@ -15,7 +15,7 @@ class SnappyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/snappy.php', 'snappy');
+        $this->mergeConfigFrom(__DIR__ . '/../config/aplus-pdf.php', 'aplus-pdf');
 
         $this->registerPdf();
         $this->registerImage();
@@ -29,8 +29,8 @@ class SnappyServiceProvider extends ServiceProvider
     protected function registerPdf()
     {
         // Bind the legacy wrapper locally so Manager can access it
-        $this->app->bind('snappy.pdf.wrapper', function ($app) {
-            $config = $app['config']->get('snappy.drivers.wkhtmltopdf');
+        $this->app->bind('aplus-pdf.wrapper', function ($app) {
+            $config = $app['config']->get('aplus-pdf.drivers.wkhtmltopdf');
 
             $snappy = new Pdf($config['binary']);
             $snappy->setOptions($config['options']);
@@ -48,12 +48,12 @@ class SnappyServiceProvider extends ServiceProvider
             return $snappy;
         });
 
-        // Bind the Manager as the main 'snappy.pdf' service
-        $this->app->singleton('snappy.pdf', function ($app) {
+        // Bind the Manager as the main 'aplus.pdf' service
+        $this->app->singleton('aplus.pdf', function ($app) {
             return new PdfManager($app);
         });
 
-        $this->app->alias('snappy.pdf', PdfManager::class);
+        $this->app->alias('aplus.pdf', PdfManager::class);
     }
 
     /**
@@ -63,8 +63,8 @@ class SnappyServiceProvider extends ServiceProvider
      */
     protected function registerImage()
     {
-        $this->app->singleton('snappy.image', function ($app) {
-            $config = $app['config']->get('snappy.image');
+        $this->app->singleton('aplus.image', function ($app) {
+            $config = $app['config']->get('aplus-pdf.image');
 
             $snappy = new Image($config['binary']);
             $snappy->setOptions($config['options']);
@@ -80,8 +80,8 @@ class SnappyServiceProvider extends ServiceProvider
             return $snappy;
         });
 
-        $this->app->alias('snappy.image', Image::class);
-        $this->app->alias('snappy.image', SnappyImage::class);
+        $this->app->alias('aplus.image', Image::class);
+        $this->app->alias('aplus.image', SnappyImage::class);
     }
 
     /**
@@ -93,7 +93,7 @@ class SnappyServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/snappy.php' => config_path('snappy.php'),
+                __DIR__ . '/../config/aplus-pdf.php' => config_path('aplus-pdf.php'),
             ], 'config');
             
             $this->commands([
@@ -111,6 +111,6 @@ class SnappyServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['snappy.pdf', 'snappy.image', Pdf::class, SnappyPdf::class, Image::class, SnappyImage::class];
+        return ['aplus.pdf', 'aplus.image', Pdf::class, SnappyPdf::class, Image::class, SnappyImage::class];
     }
 }

@@ -23,7 +23,7 @@ class RealGenerationTest extends TestCase
             $this->markTestSkipped('wkhtmltopdf binary not found. Run `php artisan snappy:install-binary wkhtmltopdf`');
         }
 
-        Config::set('snappy.drivers.wkhtmltopdf.binary', $binary);
+        Config::set('aplus-pdf.drivers.wkhtmltopdf.binary', $binary);
 
         $outputFile = __DIR__ . '/../output_wkhtmltopdf.pdf';
         @unlink($outputFile);

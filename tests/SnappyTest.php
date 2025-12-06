@@ -12,7 +12,7 @@ class SnappyTest extends TestCase
 {
     public function testPdfFacadeResolves()
     {
-        $pdf = $this->app->make('snappy.pdf');
+        $pdf = $this->app->make('aplus.pdf');
         $this->assertInstanceOf(PdfManager::class, $pdf);
     }
 
@@ -24,17 +24,17 @@ class SnappyTest extends TestCase
     
     public function testConfigurationIsLoaded()
     {
-        $this->assertTrue(config('snappy.drivers.wkhtmltopdf.enabled'));
-        $this->assertTrue(config('snappy.image.enabled'));
+        $this->assertTrue(config('aplus-pdf.drivers.wkhtmltopdf.enabled'));
+        $this->assertTrue(config('aplus-pdf.image.enabled'));
     }
 
     public function testPdfAlias()
     {
-        $this->assertInstanceOf(PdfManager::class, app('snappy.pdf'));
+        $this->assertInstanceOf(PdfManager::class, app('aplus.pdf'));
     }
 
     public function testImageAlias()
     {
-        $this->assertInstanceOf(AplusImage::class, app('snappy.image'));
+        $this->assertInstanceOf(AplusImage::class, app('aplus.image'));
     }
 }

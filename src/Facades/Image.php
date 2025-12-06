@@ -27,6 +27,6 @@ class Image extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'snappy.image';
+        return 'aplus.image';
     }
 }

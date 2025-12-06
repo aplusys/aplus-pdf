@@ -19,7 +19,8 @@ A modernized PDF generation package for Laravel, supporting multiple drivers inc
 
 2. Publish configuration (optional but recommended):
    ```bash
-   php artisan vendor:publish --provider="Aplus\Pdf\SnappyServiceProvider" --tag="config"
+   ```bash
+   php artisan vendor:publish --provider="Aplus\Pdf\PdfServiceProvider" --tag="config"
    ```
 
 ## Binary Installation
@@ -85,7 +86,7 @@ Pdf::view('invoice')
     ->save('invoice.pdf');
 ```
 
-Or configure the default driver in `config/snappy.php`.
+Or configure the default driver in `config/aplus-pdf.php`.
 
 ### Options
 
@@ -135,7 +136,7 @@ public function test_invoice_download()
 
 ## Configuration
 
-The `config/snappy.php` file allows you to configure defaults for each driver.
+The `config/aplus-pdf.php` file allows you to configure defaults for each driver.
 
 ```php
 return [

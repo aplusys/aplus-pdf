@@ -1,11 +1,11 @@
 {
-    "name": "aplus/snappy",
-    "description": "Laravel 12 wrapper for KnpLabs/snappy",
+    "name": "aplus/pdf",
+    "description": "Laravel 12 wrapper for PDF generation",
     "license": "MIT",
     "authors": [
         {
-            "name": "Aplus",
-            "email": "dev@aplus.com"
+            "name": "Aplus Team",
+            "email": "info@aplus-yemen.com"
         }
     ],
     "require": {
@@ -34,7 +34,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Aplus\\Pdf\\SnappyServiceProvider"
+                "Aplus\\Pdf\\PdfServiceProvider"
             ],
             "aliases": {
                 "Pdf": "Aplus\\Pdf\\Facades\\Pdf",

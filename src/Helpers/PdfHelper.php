@@ -12,6 +12,6 @@ if (!function_exists('pdf')) {
      */
     function pdf(): \Aplus\Pdf\PdfManager
     {
-        return app('snappy.pdf');
+        return app('aplus.pdf');
     }
 }
