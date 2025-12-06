@@ -1,6 +1,6 @@
 <?php
 
-namespace Aplus\Snappy;
+namespace Aplus\Pdf;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
@@ -103,6 +103,16 @@ class Pdf extends SnappyPdf
         $this->file = $file;
         $this->html = null;
         return $this;
+    }
+
+    /**
+     * Get the HTML content.
+     * 
+     * @return string|null
+     */
+    public function getHtml()
+    {
+        return $this->html;
     }
 
     /**

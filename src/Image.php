@@ -1,6 +1,6 @@
 <?php
 
-namespace Aplus\Snappy;
+namespace Aplus\Pdf;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;

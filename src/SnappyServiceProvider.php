@@ -1,6 +1,6 @@
 <?php
 
-namespace Aplus\Snappy;
+namespace Aplus\Pdf;
 
 use Illuminate\Support\ServiceProvider;
 use Knp\Snappy\Image as SnappyImage;
@@ -28,8 +28,9 @@ class SnappyServiceProvider extends ServiceProvider
      */
     protected function registerPdf()
     {
-        $this->app->singleton('snappy.pdf', function ($app) {
-            $config = $app['config']->get('snappy.pdf');
+        // Bind the legacy wrapper locally so Manager can access it
+        $this->app->bind('snappy.pdf.wrapper', function ($app) {
+            $config = $app['config']->get('snappy.drivers.wkhtmltopdf');
 
             $snappy = new Pdf($config['binary']);
             $snappy->setOptions($config['options']);
@@ -47,8 +48,12 @@ class SnappyServiceProvider extends ServiceProvider
             return $snappy;
         });
 
-        $this->app->alias('snappy.pdf', Pdf::class);
-        $this->app->alias('snappy.pdf', SnappyPdf::class);
+        // Bind the Manager as the main 'snappy.pdf' service
+        $this->app->singleton('snappy.pdf', function ($app) {
+            return new PdfManager($app);
+        });
+
+        $this->app->alias('snappy.pdf', PdfManager::class);
     }
 
     /**
@@ -90,6 +95,12 @@ class SnappyServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../config/snappy.php' => config_path('snappy.php'),
             ], 'config');
+            
+            $this->commands([
+                \Aplus\Pdf\Console\Commands\SnappyInstallCommand::class,
+                \Aplus\Pdf\Console\Commands\DetectBinaryCommand::class,
+                \Aplus\Pdf\Console\Commands\VerifyCommand::class,
+            ]);
         }
     }
 

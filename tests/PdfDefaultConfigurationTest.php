@@ -1,15 +1,15 @@
 <?php
 
-namespace Aplus\Snappy\Tests;
+namespace Aplus\Pdf\Tests;
 
-use Aplus\Snappy\Pdf;
+use Aplus\Pdf\Pdf;
 
 class PdfDefaultConfigurationTest extends TestCase
 {
     public function testDefaultConfigIsApplied()
     {
-        // Must resolve from container to get the configured instance
-        $pdf = app('snappy.pdf'); 
+        // Resolve the underlying legacy wrapper which holds the options
+        $pdf = app('snappy.pdf.wrapper'); 
         $options = $pdf->getOptions();
 
         $this->assertEquals(0, $options['margin-top']);

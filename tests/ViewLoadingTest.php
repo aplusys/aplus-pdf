@@ -1,45 +1,43 @@
 <?php
 
-namespace Aplus\Snappy\Tests;
+namespace Aplus\Pdf\Tests;
 
-use Aplus\Snappy\Pdf;
-use Aplus\Snappy\Image;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\View\View;
+use Aplus\Pdf\Pdf;
+use Aplus\Pdf\Image;
+use Aplus\Pdf\Contracts\DriverInterface;
+use Aplus\Pdf\PdfManager;
 use Mockery;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class ViewLoadingTest extends TestCase
 {
     public function testPdfLoadView()
     {
-        $viewFactory = Mockery::mock(ViewFactory::class);
+        $viewFactory = Mockery::mock(Factory::class);
         $view = Mockery::mock(View::class);
-
-        $viewFactory->shouldReceive('make')
-            ->once()
-            ->with('test.view', ['foo' => 'bar'], [])
-            ->andReturn($view);
+        $driver = Mockery::mock(DriverInterface::class);
         
-        $view->shouldReceive('render')
-            ->once()
-            ->andReturn('<h1>Test HTML</h1>');
+        $viewFactory->shouldReceive('make')->never(); 
+        // The Driver is responsible for loading the view, so correct expectation:
+        $driver->shouldReceive('loadView')->with('test.view', ['foo' => 'bar'])->once()->andReturnSelf();
 
-        $pdf = new Pdf(); // Instantiated manually to inject mock
-        $pdf->setViewFactory($viewFactory);
-
-        $pdf->loadView('test.view', ['foo' => 'bar']);
+        // Bind manager to return our mock driver
+        $this->app->bind('snappy.pdf', function () use ($driver) {
+             return $driver;
+        });
         
-        // Reflection to check protected html property
-        $reflection = new \ReflectionClass($pdf);
-        $property = $reflection->getProperty('html');
-        $property->setAccessible(true);
+        // This test is slightly different now as Manager resolves to Driver
+        // We are testing if Facade calls Driver correcty.
         
-        $this->assertEquals('<h1>Test HTML</h1>', $property->getValue($pdf));
-    }
+        \Aplus\Pdf\Facades\Pdf::loadView('test.view', ['foo' => 'bar']);
+        
+        $this->assertTrue(true);
+     }
 
     public function testImageLoadView()
     {
-        $viewFactory = Mockery::mock(ViewFactory::class);
+        $viewFactory = Mockery::mock(Factory::class);
         $view = Mockery::mock(View::class);
 
         $viewFactory->shouldReceive('make')

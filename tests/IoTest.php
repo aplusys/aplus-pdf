@@ -1,8 +1,8 @@
 <?php
 
-namespace Aplus\Snappy\Tests;
+namespace Aplus\Pdf\Tests;
 
-use Aplus\Snappy\Pdf;
+use Aplus\Pdf\Pdf;
 use Mockery;
 
 class IoTest extends TestCase

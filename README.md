@@ -1,122 +1,164 @@
-# Snappy for Laravel 12
+# Aplus PDF (Laravel Snappy Modernized)
 
-A simple, modern Laravel 12+ wrapper for [knplabs/knp-snappy](https://github.com/KnpLabs/snappy), allowing you to generate PDFs and Images from HTML using `wkhtmltopdf` and `wkhtmltoimage`.
+A modernized PDF generation package for Laravel, supporting multiple drivers including **wkhtmltopdf** and **Browsershot** (Headless Chrome). This package offers a fluent API, robust binary management, and easy testing utilities.
 
 ## Features
 
-- **Laravel 12+ Support**: Built for the latest version of Laravel.
-- **Fluent API**: Chainable methods for customization (`setPaper`, `setOrientation`, `setMargins`).
-- **View Integration**: Directly render Blade views into PDFs or Images (`loadView`).
-- **Input/Output Flexibility**: 
-  - Load from HTML strings, Blade Views, or existing Files.
-  - Download responses, Inline responses, or Save to disk.
-- **Facades**: Clean `Pdf` and `Image` facades for easy usage.
+- **Multi-Driver Support**: Switch between `wkhtmltopdf` (legacy, lightweight) and `browsershot` (modern, CSS3/JS support) easily.
+- **Fluent API**: Chainable methods for building PDFs (`Pdf::view('...')->save('...')`).
+- **Binary Management**: Artisan commands to automatically install and verify dependencies (`wkhtmltopdf`, `puppeteer`, `chrome`).
+- **Testing Fakes**: `Pdf::fake()` for asserting PDF generation without running binaries.
+- **Queue Support**: Render PDFs in the background.
 
-## Requirements
+## Installation
 
-You must have `wkhtmltopdf` and `wkhtmltoimage` binaries installed on your system.
+1. Install via Composer:
+   ```bash
+   composer require aplus/pdf
+   ```
 
-### Check Installation
+2. Publish configuration (optional but recommended):
+   ```bash
+   php artisan vendor:publish --provider="Aplus\Pdf\SnappyServiceProvider" --tag="config"
+   ```
+
+## Binary Installation
+
+This package includes a powerful command to manage the underlying binaries required for PDF generation.
+
+### Auto-Install (Recommended)
+
+To install the necessary binaries for your chosen driver:
 
 ```bash
-wkhtmltopdf --version
-wkhtmltoimage --version
+# For wkhtmltopdf (Linux/Ubuntu)
+php artisan snappy:install-binary wkhtmltopdf
+
+# For Browsershot (Chrome/Puppeteer)
+php artisan snappy:install-binary chromium
 ```
 
-### Installation
+> **Note:** The `chromium` installation includes Puppeteer and a local Chrome binary. If you use `Browsershot`, you must have Node.js installed on your server.
 
-**Ubuntu / Debian:**
-```bash
-sudo apt-get install wkhtmltopdf
-```
+### Manual Verification
 
-**macOS:**
-```bash
-brew install --cask wkhtmltopdf
-```
-
-**Windows:**
-Download the [installer here](https://wkhtmltopdf.org/downloads.html).
-
-## Package Installation
+Verify your installation:
 
 ```bash
-composer require aplus/snappy
-```
-
-### Configuration
-
-Publish the config file to set binary paths and default options (like A4, Portrait, 0 margins).
-
-```bash
-php artisan vendor:publish --provider="Aplus\Snappy\SnappyServiceProvider"
+php artisan snappy:verify /usr/local/bin/wkhtmltopdf
 ```
 
 ## Usage
 
-### PDF Generation
+### Basic Usage
 
-**1. Download a View:**
+Use the `Pdf` facade to generate PDFs from views, HTML, or URLs.
 
 ```php
-use Aplus\Snappy\Facades\Pdf;
+use Aplus\Pdf\Facades\Pdf;
 
-public function invoice($id)
+// Download a PDF from a Blade view
+return Pdf::view('invoices.show', ['invoice' => $invoice])
+    ->download('invoice.pdf');
+
+// Display inline in browser
+return Pdf::html('<h1>Hello World</h1>')
+    ->inline('hello.pdf');
+
+// Save to disk
+Pdf::url('https://google.com')
+    ->save(storage_path('app/google.pdf'));
+```
+
+### Driver Selection
+
+You can switch drivers at runtime:
+
+```php
+Pdf::driver('browsershot')
+    ->view('reports.complex-chart')
+    ->save('report.pdf');
+
+// Or change driver in the chain:
+Pdf::view('invoice')
+    ->driver('browsershot')
+    ->save('invoice.pdf');
+```
+
+Or configure the default driver in `config/snappy.php`.
+
+### Options
+
+Pass driver-specific options easily:
+
+```php
+Pdf::view('document')
+    ->setOption('margin-top', '20mm') // wkhtmltopdf option
+    ->setOption('landscape', true)    // Browsershot option
+    ->save('doc.pdf');
+```
+
+### Asynchronous Rendering
+
+Dispatch a job to render the PDF in the background:
+
+```php
+use Aplus\Pdf\Jobs\RenderPdfJob;
+
+RenderPdfJob::dispatch(
+    'emails.order-confirmation', 
+    ['order' => $order], 
+    's3', 
+    'invoices/order-123.pdf'
+);
+```
+
+## Testing
+
+Use `Pdf::fake()` to verify PDF generation logic without actually rendering files.
+
+```php
+use Aplus\Pdf\Facades\Pdf;
+
+public function test_invoice_download()
 {
-    $order = Order::find($id);
+    Pdf::fake();
+
+    $response = $this->get('/invoice/1');
+
+    Pdf::assertRenderedHtml('Invoice #1');
     
-    return Pdf::loadView('invoices.show', ['order' => $order])
-        ->setPaper('a4')
-        ->setOrientation('landscape')
-        ->download('invoice.pdf');
+    // If you used view()
+    // Pdf::assertRenderedHtml('...'); // PdfFake captures the rendered HTML
 }
 ```
 
-**2. Inline Display (Open in Browser):**
+## Configuration
+
+The `config/snappy.php` file allows you to configure defaults for each driver.
 
 ```php
-return Pdf::loadHTML('<h1>Usage Report</h1>')
-    ->inline('report.pdf');
+return [
+    'default' => 'wkhtmltopdf',
+
+    'drivers' => [
+        'wkhtmltopdf' => [
+            'binary' => env('WKHTMLTOPDF_BINARY', '/usr/local/bin/wkhtmltopdf'),
+            'options' => [],
+            'timeout' => 3600,
+        ],
+
+        'browsershot' => [
+            'node_binary' => env('NODE_BINARY', '/usr/bin/node'),
+            'npm_binary' => env('NPM_BINARY', '/usr/bin/npm'),
+            'modules_path' => base_path('node_modules'),
+        ],
+    ],
+    // ...
+];
 ```
 
-**3. Save to File:**
+## Troubleshooting
 
-```php
-Pdf::loadFile(public_path('reports/template.html'))
-    ->save(storage_path('app/reports/daily.pdf'));
-```
-
-**4. Fluent Options:**
-
-```php
-Pdf::loadView('report')
-    ->setOption('footer-right', '[page] of [toPage]')
-    ->setOption('font-size', 10)
-    ->download();
-```
-
-### Image Generation
-
-Usage is identical to PDF, just use the `Image` facade.
-
-```php
-use Aplus\Snappy\Facades\Image;
-
-return Image::loadView('charts.analytics')
-    ->setOption('quality', 90)
-    ->download('chart.jpg');
-```
-
-## Limitations
-
-This package relies on `wkhtmltopdf`, which uses an older Qt WebKit rendering engine. Please be aware of the following limitations:
-
-1.  **NO CSS Grid Support**: The engine does not support `display: grid`.
-    *   *Workaround*: Use Flexbox (with `-webkit-` prefixes like `-webkit-box`), Tables, or Floats for layout.
-2.  **Limited Modern CSS/JS**:
-    *   Modern CSS features (e.g., CSS Variables, newer selectors) may not work or behave inconsistently.
-    *   ES6+ JavaScript features are not supported.
-3.  **Flexbox Quirks**: Flexbox is supported but requires the older usage syntax (often needs `-webkit-box` or `-webkit-flex`).
-4.  **Performance**: Generating large/complex PDFs can be memory intensive and blocking. For high volume, consider queuing the jobs.
-
-If you require full modern CSS support (Grid, etc.), you should look into Headless Chrome solutions (e.g., Puppeteer or Browsershot).
+- **"Cannot find module 'puppeteer'"**: Run `php artisan snappy:install-binary chromium` or `npm install puppeteer` in your project root.
+- **"wkhtmltopdf: cannot connect to X server"**: Ensure you are using the headless version (usually default in recent versions) or install `xvfb-run` wrapper.

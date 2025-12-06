@@ -11,7 +11,8 @@
     "require": {
         "php": "^8.2",
         "illuminate/support": "^12.0",
-        "knplabs/knp-snappy": "^1.0"
+        "knplabs/knp-snappy": "^1.0",
+        "spatie/browsershot": "^4.0"
     },
     "require-dev": {
         "orchestra/testbench": "^10.0",
@@ -19,22 +20,25 @@
     },
     "autoload": {
         "psr-4": {
-            "Aplus\\Snappy\\": "src/"
-        }
+            "Aplus\\Pdf\\": "src/"
+        },
+        "files": [
+            "src/Helpers/PdfHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Aplus\\Snappy\\Tests\\": "tests/"
+            "Aplus\\Pdf\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Aplus\\Snappy\\SnappyServiceProvider"
+                "Aplus\\Pdf\\SnappyServiceProvider"
             ],
             "aliases": {
-                "Pdf": "Aplus\\Snappy\\Facades\\Pdf",
-                "Image": "Aplus\\Snappy\\Facades\\Image"
+                "Pdf": "Aplus\\Pdf\\Facades\\Pdf",
+                "Image": "Aplus\\Pdf\\Facades\\Image"
             }
         }
     },

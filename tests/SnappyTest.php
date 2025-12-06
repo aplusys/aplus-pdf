@@ -1,18 +1,19 @@
 <?php
 
-namespace Aplus\Snappy\Tests;
+namespace Aplus\Pdf\Tests;
 
-use Aplus\Snappy\Facades\Pdf;
-use Aplus\Snappy\Facades\Image;
-use Aplus\Snappy\Pdf as AplusPdf;
-use Aplus\Snappy\Image as AplusImage;
+use Aplus\Pdf\Facades\Pdf;
+use Aplus\Pdf\Facades\Image;
+use Aplus\Pdf\Pdf as AplusPdf;
+use Aplus\Pdf\PdfManager;
+use Aplus\Pdf\Image as AplusImage;
 
 class SnappyTest extends TestCase
 {
     public function testPdfFacadeResolves()
     {
-        $this->assertInstanceOf(AplusPdf::class, Pdf::getFacadeRoot());
-        $this->assertInstanceOf(\Knp\Snappy\Pdf::class, Pdf::getFacadeRoot());
+        $pdf = $this->app->make('snappy.pdf');
+        $this->assertInstanceOf(PdfManager::class, $pdf);
     }
 
     public function testImageFacadeResolves()
@@ -23,13 +24,13 @@ class SnappyTest extends TestCase
     
     public function testConfigurationIsLoaded()
     {
-        $this->assertTrue(config('snappy.pdf.enabled'));
+        $this->assertTrue(config('snappy.drivers.wkhtmltopdf.enabled'));
         $this->assertTrue(config('snappy.image.enabled'));
     }
 
     public function testPdfAlias()
     {
-        $this->assertInstanceOf(AplusPdf::class, app('snappy.pdf'));
+        $this->assertInstanceOf(PdfManager::class, app('snappy.pdf'));
     }
 
     public function testImageAlias()
