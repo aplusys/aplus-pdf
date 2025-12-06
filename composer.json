@@ -1,0 +1,49 @@
+{
+    "name": "aplus/snappy",
+    "description": "Laravel 12 wrapper for KnpLabs/snappy",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aplus",
+            "email": "dev@aplus.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^12.0",
+        "knplabs/knp-snappy": "^1.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.0",
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aplus\\Snappy\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aplus\\Snappy\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aplus\\Snappy\\SnappyServiceProvider"
+            ],
+            "aliases": {
+                "Pdf": "Aplus\\Snappy\\Facades\\Pdf",
+                "Image": "Aplus\\Snappy\\Facades\\Image"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
