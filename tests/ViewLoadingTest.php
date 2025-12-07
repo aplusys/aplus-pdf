@@ -30,7 +30,7 @@ class ViewLoadingTest extends TestCase
         // This test is slightly different now as Manager resolves to Driver
         // We are testing if Facade calls Driver correcty.
         
-        \Aplus\Pdf\Facades\Pdf::loadView('test.view', ['foo' => 'bar']);
+        \Aplus\Pdf\Facades\Apdf::loadView('test.view', ['foo' => 'bar']);
         
         $this->assertTrue(true);
      }

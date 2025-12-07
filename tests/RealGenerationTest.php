@@ -3,7 +3,7 @@
 namespace Aplus\Pdf\Tests;
 
 use Aplus\Pdf\Builders\PdfBuilder;
-use Aplus\Pdf\Facades\Pdf;
+use Aplus\Pdf\Facades\Apdf;
 use Aplus\Pdf\Managers\BinaryManager;
 use Illuminate\Support\Facades\Config;
 
@@ -28,7 +28,7 @@ class RealGenerationTest extends TestCase
         $outputFile = __DIR__ . '/../output_wkhtmltopdf.pdf';
         @unlink($outputFile);
 
-        $driver = Pdf::driver('wkhtmltopdf');
+        $driver = Apdf::driver('wkhtmltopdf');
         (new PdfBuilder($driver))
             ->html('<h1>Hello Wkhtmltopdf</h1><p>Generated at ' . date('Y-m-d H:i:s') . '</p>')
             ->save($outputFile);
@@ -47,12 +47,12 @@ class RealGenerationTest extends TestCase
         @unlink($outputFile);
 
         try {
-            $driver = Pdf::driver('browsershot');
+            $driver = Apdf::driver('browsershot');
             (new PdfBuilder($driver))
                 ->html('<h1>Hello Browsershot</h1><p>Generated at ' . date('Y-m-d H:i:s') . '</p>')
                 ->save($outputFile);
         } catch (\Exception $e) {
-            if (str_contains($e->getMessage(), 'Could not find') || str_contains($e->getMessage(), 'npm')) {
+            if (str_contains($e->getMessage(), 'Could not find') || str_contains($e->getMessage(), 'npm') || str_contains($e->getMessage(), 'Cannot find module')) {
                  $this->markTestSkipped('Browsershot dependencies missing: ' . $e->getMessage());
             }
             throw $e;

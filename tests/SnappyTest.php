@@ -2,7 +2,7 @@
 
 namespace Aplus\Pdf\Tests;
 
-use Aplus\Pdf\Facades\Pdf;
+use Aplus\Pdf\Facades\Apdf;
 use Aplus\Pdf\Facades\Image;
 use Aplus\Pdf\Pdf as AplusPdf;
 use Aplus\Pdf\PdfManager;

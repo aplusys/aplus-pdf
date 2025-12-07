@@ -2,28 +2,28 @@
 
 namespace Aplus\Pdf\Tests;
 
-use Aplus\Pdf\Facades\Pdf;
+use Aplus\Pdf\Facades\Apdf;
 
 class PdfFakeTest extends TestCase
 {
     public function testPdfFakeSwapsInstance()
     {
-        Pdf::fake();
+        Apdf::fake();
         
         // Use the fluent builder
-        Pdf::html('<h1>Test</h1>')
+        Apdf::html('<h1>Test</h1>')
             ->save('invoice.pdf');
         
-        Pdf::assertRenderedHtml('<h1>Test</h1>');
+        Apdf::assertRenderedHtml('<h1>Test</h1>');
 
     }
     
     public function testFluentHelperWithFake()
     {
-        Pdf::fake();
+        Apdf::fake();
         
         pdf()->html('<h1>Fluent</h1>')->save('fluent.pdf');
         
-        Pdf::assertRenderedHtml('<h1>Fluent</h1>');
+        Apdf::assertRenderedHtml('<h1>Fluent</h1>');
     }
 }

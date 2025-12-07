@@ -5,9 +5,9 @@ A modernized PDF generation package for Laravel, supporting multiple drivers inc
 ## Features
 
 - **Multi-Driver Support**: Switch between `wkhtmltopdf` (legacy, lightweight) and `browsershot` (modern, CSS3/JS support) easily.
-- **Fluent API**: Chainable methods for building PDFs (`Pdf::view('...')->save('...')`).
+- **Fluent API**: Chainable methods for building PDFs (`Apdf::view('...')->save('...')`).
 - **Binary Management**: Artisan commands to automatically install and verify dependencies (`wkhtmltopdf`, `puppeteer`, `chrome`).
-- **Testing Fakes**: `Pdf::fake()` for asserting PDF generation without running binaries.
+- **Testing Fakes**: `Apdf::fake()` for asserting PDF generation without running binaries.
 - **Queue Support**: Render PDFs in the background.
 
 ## Installation
@@ -53,21 +53,21 @@ php artisan pdf:verify /usr/local/bin/wkhtmltopdf
 
 ### Basic Usage
 
-Use the `Pdf` facade to generate PDFs from views, HTML, or URLs.
+Use the `Apdf` facade to generate PDFs from views, HTML, or URLs.
 
 ```php
-use Aplus\Pdf\Facades\Pdf;
+use Aplus\Pdf\Facades\Apdf;
 
 // Download a PDF from a Blade view
-return Pdf::view('invoices.show', ['invoice' => $invoice])
+return Apdf::view('invoices.show', ['invoice' => $invoice])
     ->download('invoice.pdf');
 
 // Display inline in browser
-return Pdf::html('<h1>Hello World</h1>')
+return Apdf::html('<h1>Hello World</h1>')
     ->inline('hello.pdf');
 
 // Save to disk
-Pdf::url('https://google.com')
+Apdf::url('https://google.com')
     ->save(storage_path('app/google.pdf'));
 ```
 
@@ -76,12 +76,12 @@ Pdf::url('https://google.com')
 You can switch drivers at runtime:
 
 ```php
-Pdf::driver('browsershot')
+Apdf::driver('browsershot')
     ->view('reports.complex-chart')
     ->save('report.pdf');
 
 // Or change driver in the chain:
-Pdf::view('invoice')
+Apdf::view('invoice')
     ->driver('browsershot')
     ->save('invoice.pdf');
 ```
@@ -93,7 +93,7 @@ Or configure the default driver in `config/aplus-pdf.php`.
 Pass driver-specific options easily:
 
 ```php
-Pdf::view('document')
+Apdf::view('document')
     ->setOption('margin-top', '20mm') // wkhtmltopdf option
     ->setOption('landscape', true)    // Browsershot option
     ->save('doc.pdf');
@@ -116,21 +116,21 @@ RenderPdfJob::dispatch(
 
 ## Testing
 
-Use `Pdf::fake()` to verify PDF generation logic without actually rendering files.
+Use `Apdf::fake()` to verify PDF generation logic without actually rendering files.
 
 ```php
-use Aplus\Pdf\Facades\Pdf;
+use Aplus\Pdf\Facades\Apdf;
 
 public function test_invoice_download()
 {
-    Pdf::fake();
+    Apdf::fake();
 
     $response = $this->get('/invoice/1');
 
-    Pdf::assertRenderedHtml('Invoice #1');
+    Apdf::assertRenderedHtml('Invoice #1');
     
     // If you used view()
-    // Pdf::assertRenderedHtml('...'); // PdfFake captures the rendered HTML
+    // Apdf::assertRenderedHtml('...'); // PdfFake captures the rendered HTML
 }
 ```
 

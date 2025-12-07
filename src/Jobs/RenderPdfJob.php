@@ -2,7 +2,7 @@
 
 namespace Aplus\Pdf\Jobs;
 
-use Aplus\Pdf\Facades\Pdf;
+use Aplus\Pdf\Facades\Apdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -32,7 +32,7 @@ class RenderPdfJob implements ShouldQueue
     public function handle()
     {
         // Use the facade or manager to render
-        $content = Pdf::view($this->view, $this->data)
+        $content = Apdf::view($this->view, $this->data)
             ->options($this->options)
             ->output();
 

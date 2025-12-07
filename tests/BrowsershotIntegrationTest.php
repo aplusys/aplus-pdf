@@ -4,7 +4,7 @@ namespace Aplus\Pdf\Tests;
 
 use Aplus\Pdf\Drivers\BrowsershotDriver;
 use Aplus\Pdf\PdfManager;
-use Aplus\Pdf\Facades\Pdf;
+use Aplus\Pdf\Facades\Apdf;
 
 class BrowsershotIntegrationTest extends TestCase
 {
@@ -13,7 +13,7 @@ class BrowsershotIntegrationTest extends TestCase
         // Set default driver to browsershot
         config(['aplus-pdf.default' => 'browsershot']);
         
-        $driver = Pdf::driver('browsershot');
+        $driver = Apdf::driver('browsershot');
         
         $this->assertInstanceOf(BrowsershotDriver::class, $driver);
     }

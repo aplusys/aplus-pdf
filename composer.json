@@ -37,7 +37,7 @@
                 "Aplus\\Pdf\\PdfServiceProvider"
             ],
             "aliases": {
-                "Pdf": "Aplus\\Pdf\\Facades\\Pdf",
+                "Apdf": "Aplus\\Pdf\\Facades\\Apdf",
                 "Image": "Aplus\\Pdf\\Facades\\Image"
             }
         }

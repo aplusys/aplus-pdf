@@ -17,9 +17,9 @@ use Aplus\Pdf\Testing\PdfFake;
  * @method static \Aplus\Pdf\Contracts\DriverInterface setOptions(array $options)
  * @method static \Aplus\Pdf\Testing\PdfFake fake()
  * 
- * @see \Aplus\Pdf\Pdf
+ * @see \Aplus\Pdf\Apdf
  */
-class Pdf extends Facade
+class Apdf extends Facade
 {
     /**
      * Replace the bound instance with a fake.
