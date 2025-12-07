@@ -41,6 +41,15 @@ php artisan pdf:install-binary chromium
 php artisan pdf:install-binary playwright
 ```
 
+#### Manual Playwright Installation
+If the artisan command fails, you can install Playwright manually in your project root:
+
+```bash
+npm install playwright
+npx playwright install
+npx playwright install-deps
+```
+
 > **Note:** The `chromium` installation includes Puppeteer and a local Chrome binary. If you use `Browsershot`, you must have Node.js installed on your server.
 
 ### Manual Verification
@@ -188,3 +197,9 @@ return [
 
 - **"Cannot find module 'puppeteer'"**: Run `php artisan pdf:install-binary chromium` or `npm install puppeteer` in your project root.
 - **"wkhtmltopdf: cannot connect to X server"**: Ensure you are using the headless version (usually default in recent versions) or install `xvfb-run` wrapper.
+
+## Playwright Configuration service
+
+This package automatically handles the Playwright browser cache location using `storage/playwright`. You generally **do not** need a custom `.playwrightrc` or config file for this aspect, as the package enforces the path via environment variables during installation and execution.
+
+However, if you wish to customize other behavior globally for Playwright in your project, you can use standard Playwright config files, but note that `Aplus\Pdf` manages the `launch` options specifically for PDF tasks.

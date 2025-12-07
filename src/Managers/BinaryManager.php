@@ -142,12 +142,17 @@ class BinaryManager implements BinaryManagerInterface
         }
 
         // 2. Install Browsers
-        $process = new Process(['npx', 'playwright', 'install', 'chromium']);
+        // Installing all supported browsers ensures we get chromium and its headless-shell if split
+        $process = new Process(['npx', 'playwright', 'install'], null, [
+             'PLAYWRIGHT_BROWSERS_PATH' => base_path('storage/playwright') // Defaulting to project storage
+        ]);
         $process->setTimeout(1200);
         $process->run();
         
         // 3. Install System Deps
-        $process = new Process(['npx', 'playwright', 'install-deps', 'chromium']);
+        $process = new Process(['npx', 'playwright', 'install-deps'], null, [
+             'PLAYWRIGHT_BROWSERS_PATH' => base_path('storage/playwright')
+        ]);
         $process->setTimeout(1200);
         $process->run();
 

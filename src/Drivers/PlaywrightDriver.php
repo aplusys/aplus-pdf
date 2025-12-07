@@ -114,7 +114,10 @@ class PlaywrightDriver implements DriverInterface
             json_encode($scriptOptions),
         ];
 
-        $process = new Process($command);
+        $process = new Process($command, null, array_merge([
+            'PLAYWRIGHT_BROWSERS_PATH' => $this->config['browser_path'] ?? base_path('storage/playwright'),
+        ], $this->config['env'] ?? []));
+        
         $process->setTimeout($this->config['timeout'] ?? 60);
         $process->run();
 
