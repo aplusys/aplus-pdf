@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 
 class DetectBinaryCommand extends Command
 {
-    protected $signature = 'snappy:detect-binary {driver? : The driver name (wkhtmltopdf, chromium)}';
+    protected $signature = 'pdf:detect-binary {driver? : The driver name (wkhtmltopdf, chromium)}';
 
     protected $description = 'Detect the path to the binary for the given driver';
 

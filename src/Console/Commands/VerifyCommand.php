@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 
 class VerifyCommand extends Command
 {
-    protected $signature = 'snappy:verify {binary}';
+    protected $signature = 'pdf:verify {binary}';
 
     protected $description = 'Verify the given binary path is executable';
 

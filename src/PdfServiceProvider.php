@@ -97,7 +97,7 @@ class PdfServiceProvider extends ServiceProvider
             ], 'config');
             
             $this->commands([
-                \Aplus\Pdf\Console\Commands\SnappyInstallCommand::class,
+                \Aplus\Pdf\Console\Commands\InstallBinaryCommand::class,
                 \Aplus\Pdf\Console\Commands\DetectBinaryCommand::class,
                 \Aplus\Pdf\Console\Commands\VerifyCommand::class,
             ]);

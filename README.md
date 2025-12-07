@@ -14,7 +14,7 @@ A modernized PDF generation package for Laravel, supporting multiple drivers inc
 
 1. Install via Composer:
    ```bash
-   composer require aplus/pdf
+   composer require aplusy/pdf
    ```
 
 2. Publish configuration (optional but recommended):
@@ -33,10 +33,10 @@ To install the necessary binaries for your chosen driver:
 
 ```bash
 # For wkhtmltopdf (Linux/Ubuntu)
-php artisan snappy:install-binary wkhtmltopdf
+php artisan pdf:install-binary wkhtmltopdf
 
 # For Browsershot (Chrome/Puppeteer)
-php artisan snappy:install-binary chromium
+php artisan pdf:install-binary chromium
 ```
 
 > **Note:** The `chromium` installation includes Puppeteer and a local Chrome binary. If you use `Browsershot`, you must have Node.js installed on your server.
@@ -46,7 +46,7 @@ php artisan snappy:install-binary chromium
 Verify your installation:
 
 ```bash
-php artisan snappy:verify /usr/local/bin/wkhtmltopdf
+php artisan pdf:verify /usr/local/bin/wkhtmltopdf
 ```
 
 ## Usage
@@ -161,5 +161,5 @@ return [
 
 ## Troubleshooting
 
-- **"Cannot find module 'puppeteer'"**: Run `php artisan snappy:install-binary chromium` or `npm install puppeteer` in your project root.
+- **"Cannot find module 'puppeteer'"**: Run `php artisan pdf:install-binary chromium` or `npm install puppeteer` in your project root.
 - **"wkhtmltopdf: cannot connect to X server"**: Ensure you are using the headless version (usually default in recent versions) or install `xvfb-run` wrapper.

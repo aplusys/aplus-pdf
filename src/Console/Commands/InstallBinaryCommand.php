@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Http;
 
 use Illuminate\Support\Facades\Storage;
 
-class SnappyInstallCommand extends Command
+class InstallBinaryCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'snappy:install-binary {driver=wkhtmltopdf} {--platform=} {--force}';
+    protected $signature = 'pdf:install-binary {driver=wkhtmltopdf} {--platform=} {--force}';
 
     /**
      * The console command description.
