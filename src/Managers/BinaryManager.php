@@ -18,6 +18,14 @@ class BinaryManager implements BinaryManagerInterface
             return $this->detectChromium();
         }
 
+        if ($driver === 'playwright') {
+             // Check if playwright exists in node_modules
+             if (file_exists(base_path('node_modules/playwright'))) {
+                 return 'installed';
+             }
+             return null;
+        }
+
         return null;
     }
 
@@ -115,7 +123,35 @@ class BinaryManager implements BinaryManagerInterface
             $this->installLinuxDependencies();
         }
 
+        if ($driver === 'playwright') {
+            return $this->installPlaywright();
+        }
+        
         return true;
+    }
+
+    protected function installPlaywright(): bool
+    {
+        // 1. Install playwright lib
+        $process = new Process(['npm', 'install', 'playwright']);
+        $process->setTimeout(300);
+        $process->run();
+        
+        if (!$process->isSuccessful()) {
+            return false;
+        }
+
+        // 2. Install Browsers
+        $process = new Process(['npx', 'playwright', 'install', 'chromium']);
+        $process->setTimeout(600);
+        $process->run();
+        
+        // 3. Install System Deps
+        $process = new Process(['npx', 'playwright', 'install-deps', 'chromium']);
+        $process->setTimeout(600);
+        $process->run();
+
+        return $process->isSuccessful();
     }
 
     protected function installLinuxDependencies()

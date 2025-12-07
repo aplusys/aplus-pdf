@@ -6,7 +6,7 @@ return [
     'drivers' => [
         'wkhtmltopdf' => [
             'enabled' => true,
-            'binary'  => env('WKHTMLTOPDF_BINARY', '/usr/local/bin/wkhtmltopdf'),
+            'binary'  => env('WKHTMLTOPDF_BINARY', '/usr/bin/wkhtmltopdf'),
             'timeout' => false,
             'options' => [
                 'margin-top'    => 0,
@@ -15,6 +15,10 @@ return [
                 'margin-left'   => 0,
                 'page-size'     => 'a4',
                 'orientation'   => 'portrait',
+                'enable-local-file-access' => true,
+                'disable-smart-shrinking'  => true,
+                'dpi'                      => 96,
+                'zoom'                     => 1,
             ],
             'env'     => [],
         ],
@@ -24,11 +28,17 @@ return [
             'npm_binary' => env('NPM_BINARY', '/usr/bin/npm'),
             'node_modules_path' => env('NODE_MODULES_PATH', base_path('node_modules')),
         ],
+
+        'playwright' => [
+            'node_binary' => env('NODE_BINARY', '/usr/bin/node'),
+            'npm_binary' => env('NPM_BINARY', '/usr/bin/npm'),
+            'timeout' => 60,
+        ],
     ],
 
     'image' => [
         'enabled' => true,
-        'binary'  => env('WKHTMLTOIMAGE_BINARY', '/usr/local/bin/wkhtmltoimage'),
+        'binary'  => env('WKHTMLTOIMAGE_BINARY', '/usr/bin/wkhtmltoimage'),
         'timeout' => false,
         'options' => [],
         'env'     => [],

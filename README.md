@@ -4,7 +4,7 @@ A modernized PDF generation package for Laravel, supporting multiple drivers inc
 
 ## Features
 
-- **Multi-Driver Support**: Switch between `wkhtmltopdf` (legacy, lightweight) and `browsershot` (modern, CSS3/JS support) easily.
+- **Multi-Driver Support**: Switch between `wkhtmltopdf` (legacy), `browsershot` (Puppeteer), and **Playwright** (Modern, Reliable) easily.
 - **Fluent API**: Chainable methods for building PDFs (`Apdf::view('...')->save('...')`).
 - **Binary Management**: Artisan commands to automatically install and verify dependencies (`wkhtmltopdf`, `puppeteer`, `chrome`).
 - **Testing Fakes**: `Apdf::fake()` for asserting PDF generation without running binaries.
@@ -18,7 +18,6 @@ A modernized PDF generation package for Laravel, supporting multiple drivers inc
    ```
 
 2. Publish configuration (optional but recommended):
-   ```bash
    ```bash
    php artisan vendor:publish --provider="Aplus\Pdf\PdfServiceProvider" --tag="config"
    ```
@@ -37,6 +36,9 @@ php artisan pdf:install-binary wkhtmltopdf
 
 # For Browsershot (Chrome/Puppeteer)
 php artisan pdf:install-binary chromium
+
+# For Playwright
+php artisan pdf:install-binary playwright
 ```
 
 > **Note:** The `chromium` installation includes Puppeteer and a local Chrome binary. If you use `Browsershot`, you must have Node.js installed on your server.
@@ -114,6 +116,23 @@ RenderPdfJob::dispatch(
 );
 ```
 
+### Zero Margins
+
+To achieve true zero margins, you must ensure two things:
+1. Set the PDF driver margins to `0` (or `'0mm'`).
+2. Remove the default browser margin from your HTML/Blade view using CSS.
+
+```html
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+</style>
+```
+
+If you still see white space, ensure `disable-smart-shrinking` is enabled in `config/aplus-pdf.php`.
+
 ## Testing
 
 Use `Apdf::fake()` to verify PDF generation logic without actually rendering files.
@@ -153,6 +172,12 @@ return [
             'node_binary' => env('NODE_BINARY', '/usr/bin/node'),
             'npm_binary' => env('NPM_BINARY', '/usr/bin/npm'),
             'modules_path' => base_path('node_modules'),
+        ],
+
+        'playwright' => [
+            'node_binary' => env('NODE_BINARY', '/usr/bin/node'),
+            'npm_binary' => env('NPM_BINARY', '/usr/bin/npm'),
+            'timeout' => 60,
         ],
     ],
     // ...

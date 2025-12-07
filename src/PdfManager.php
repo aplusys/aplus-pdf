@@ -7,6 +7,7 @@ namespace Aplus\Pdf;
 use Illuminate\Support\Manager;
 use Aplus\Pdf\Drivers\WkhtmltopdfDriver;
 use Aplus\Pdf\Drivers\BrowsershotDriver;
+use Aplus\Pdf\Drivers\PlaywrightDriver;
 use Aplus\Pdf\Pdf as LegacyPdf;
 
 class PdfManager extends Manager
@@ -119,5 +120,16 @@ class PdfManager extends Manager
         $config = $this->config->get('aplus-pdf.drivers.browsershot', []);
         
         return new BrowsershotDriver($this->container['view'], $config);
+    }
+    /**
+     * Create an instance of the Playwright driver.
+     *
+     * @return \Aplus\Pdf\Drivers\PlaywrightDriver
+     */
+    protected function createPlaywrightDriver()
+    {
+        $config = $this->config->get('aplus-pdf.drivers.playwright', []);
+        
+        return new PlaywrightDriver($config);
     }
 }
