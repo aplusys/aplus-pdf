@@ -134,7 +134,7 @@ class BinaryManager implements BinaryManagerInterface
     {
         // 1. Install playwright lib
         $process = new Process(['npm', 'install', 'playwright']);
-        $process->setTimeout(300);
+        $process->setTimeout(600);
         $process->run();
         
         if (!$process->isSuccessful()) {
@@ -143,12 +143,12 @@ class BinaryManager implements BinaryManagerInterface
 
         // 2. Install Browsers
         $process = new Process(['npx', 'playwright', 'install', 'chromium']);
-        $process->setTimeout(600);
+        $process->setTimeout(1200);
         $process->run();
         
         // 3. Install System Deps
         $process = new Process(['npx', 'playwright', 'install-deps', 'chromium']);
-        $process->setTimeout(600);
+        $process->setTimeout(1200);
         $process->run();
 
         return $process->isSuccessful();

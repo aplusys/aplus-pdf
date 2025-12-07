@@ -78,7 +78,7 @@ class PlaywrightDriver implements DriverInterface
     protected function runScript(string $inputPath, string $outputPath, array $options): void
     {
         $nodeBinary = $this->config['node_binary'] ?? 'node';
-        $scriptPath = $this->config['script_path'] ?? __DIR__ . '/../Scripts/playwright.js';
+        $scriptPath = $this->config['script_path'] ?? __DIR__ . '/../Scripts/playwright.cjs';
         
         // Prepare options
         $scriptOptions = [
